@@ -28,7 +28,7 @@ module.exports = (client, channel, user, config) => {
     if (!data.warnedAt || now - data.warnedAt > config.warnCooldown) {
       client.say(
         channel,
-        `@${user} please slow down — continued spam will result in a timeout.`
+        `@${user} please stop spamming. Continuing to do so will result in a mute.`
       );
 
       data.warnedAt = now;
