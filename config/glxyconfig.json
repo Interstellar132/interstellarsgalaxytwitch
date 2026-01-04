@@ -1,1 +1,17 @@
+{
+  "username": "InterstellarsGalaxy",
+  "channel": "interstellar_ca",
+
+  "spam": {
+    "maxMessages": 5,
+    "interval": 6000,
+    "timeout": 10
+  },
+
+  "caps": {
+    "percent": 70,
+    "minLength": 8,
+    "timeout": 10
+  }
+}
 
