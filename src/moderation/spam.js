@@ -1,18 +1,48 @@
-const userMessages = new Map();
+const userData = new Map();
+
+/*
+userData structure:
+{
+  messages: [timestamps],
+  warnedAt: number | null
+}
+*/
 
 module.exports = (client, channel, user, config) => {
   const now = Date.now();
-  const messages = userMessages.get(user) || [];
 
-  messages.push(now);
-  const filtered = messages.filter(t => now - t < config.interval);
-  userMessages.set(user, filtered);
+  const data = userData.get(user) || {
+    messages: [],
+    warnedAt: null
+  };
 
-  if (filtered.length > config.maxMessages) {
-    client.timeout(channel, user, config.timeout, "Spamming");
+  // Track messages
+  data.messages.push(now);
+  data.messages = data.messages.filter(
+    t => now - t < config.interval
+  );
+
+  // Spam detected
+  if (data.messages.length > config.maxMessages) {
+    // First offense → warn
+    if (!data.warnedAt || now - data.warnedAt > config.warnCooldown) {
+      client.say(
+        channel,
+        `@${user} please slow down — continued spam will result in a timeout.`
+      );
+
+      data.warnedAt = now;
+      data.messages = []; // reset message count after warning
+      userData.set(user, data);
+      return true;
+    }
+
+    // Second offense → timeout
+    client.timeout(channel, user, config.timeout, "Chat spam");
+    userData.delete(user);
     return true;
   }
 
+  userData.set(user, data);
   return false;
 };
-
