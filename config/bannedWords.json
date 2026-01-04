@@ -1,7 +1,6 @@
 [
-  "fill",
-  "this",
-  "up",
-  "later"
+  "(?<!\\w)badword(?!\\w)",
+  "(?<!\\w)anotherbadword(?!\\w)",
+  "slur\\d+",
+  "very\\s+bad\\s+phrase"
 ]
-
