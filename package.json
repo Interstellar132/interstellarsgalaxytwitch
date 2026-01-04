@@ -1,1 +1,19 @@
+{
+  "name": "InterstellarsGalaxyTwitch",
+  "version": "1.0.0",
+  "description": "Twitch integration for Interstellar's Galaxy",
+  "main": "src/intrtwitch.js",
+  "engines": {
+    "node": "18.x"
+  },
+  "scripts": {
+    "start": "node src/intrtwitch.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "tmi.js": "^1.8.6"
+  },
+  "author": "Interstellar",
+  "license": "N/A"
+}
 
