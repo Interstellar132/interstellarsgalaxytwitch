@@ -1,9 +1,12 @@
 require("dotenv").config();
 const tmi = require("tmi.js");
-const bannedWordsCheck = require("./moderation/bannedWords");
 
 // Load config
 const config = require("../config/glxyconfig.json");
+
+// Moderation & commands
+const bannedWordsCheck = require("./moderation/bannedWords");
+const customCommands = require("./commands/customCommands");
 
 // Create Twitch client
 const client = new tmi.Client({
@@ -20,12 +23,25 @@ const client = new tmi.Client({
 // Connect to Twitch
 client.connect();
 
-// Listen for messages
+// Message handler
 client.on("message", (channel, tags, message, self) => {
   if (self) return;
 
-  // Ignore mods and broadcaster (optional but recommended)
-  if (tags.mod || tags.badges?.broadcaster === "1") return;
+  const isBroadcaster = tags.badges?.broadcaster === "1";
+  const isMod = tags.mod;
+  const isPrivileged = isBroadcaster || isMod;
+
+  /* =========================
+     CUSTOM COMMANDS (ANYONE)
+  ========================= */
+  if (customCommands(client, channel, message)) {
+    return;
+  }
+
+  /* =========================
+     MODERATION (NON-MODS)
+  ========================= */
+  if (isPrivileged) return;
 
   const user = tags.username;
 
@@ -38,7 +54,7 @@ client.on("message", (channel, tags, message, self) => {
   );
 });
 
-// Optional: log connection status
+// Connection log
 client.on("connected", (address, port) => {
   console.log(`Connected to ${address}:${port}`);
 });
