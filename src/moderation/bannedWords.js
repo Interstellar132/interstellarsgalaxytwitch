@@ -36,7 +36,7 @@ module.exports = (client, channel, user, message) => {
     userWarnings.set(user, data);
     client.say(
       channel,
-      `@${user} warning ${data.count}/${MAX_WARNINGS}: banned language is not allowed.`
+      `@${user}, You have SINNED!!! Stop using prohibited terms.`
     );
 
     return true;
